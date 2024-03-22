@@ -1,5 +1,5 @@
-import { z, type ZodType } from 'zod';
-import * as yaml from 'yaml';
+import { z, type ZodType } from "zod";
+import * as yaml from "yaml";
 
 /**
  * example:
@@ -10,7 +10,7 @@ import * as yaml from 'yaml';
 export function fileNameToSlug(filename: string) {
   const indexPattern = /\/index.(md|mdx)$/;
   const pattern = /.(md|mdx)$/;
-  return filename.replace(indexPattern, '.mdx').replace(pattern, '').split('/');
+  return filename.replace(indexPattern, ".mdx").replace(pattern, "").split("/");
 }
 
 export function schemaVaridator<T extends ZodType>(schema: T) {
@@ -37,17 +37,17 @@ export function dataSchemaVaridator<T extends ZodType>(schema: T) {
   };
 }
 
-export function dataformatToExts(format: 'yaml' | 'json') {
-  if (format === 'yaml') return ['yml', 'yaml'];
-  return ['json'];
+export function dataformatToExts(format: "yaml" | "json") {
+  if (format === "yaml") return ["yml", "yaml"];
+  return ["json"];
 }
 
-export function parseData(format: 'yaml' | 'json') {
-  if (format === 'yaml') return (raw: string) => yaml.parse(raw);
+export function parseData(format: "yaml" | "json") {
+  if (format === "yaml") return (raw: string) => yaml.parse(raw);
   return (raw: string) => JSON.parse(raw);
 }
 
-export function dataFormatter(format: 'yaml' | 'json') {
+export function dataFormatter(format: "yaml" | "json") {
   const extensions = dataformatToExts(format);
   const parser = parseData(format);
   return { extensions, parser };

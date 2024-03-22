@@ -1,6 +1,6 @@
 import NextLink from "next/link";
-import { Author, Post, VStack } from "@/components";
-import { author, post } from "@/content";
+import { Author, Post, VStack, PageHeader, CategoryBadge } from "@/components";
+import { author, post, categories } from "@/content";
 import { useMDXComponents } from "@/mdx-components";
 import styles from "./page.module.css";
 
@@ -30,17 +30,16 @@ async function Page({ params }: { params: { slug: string[] } }) {
   const { title, date, lastmod } = frontmatter;
   const modified = date.getTime() !== lastmod.getTime();
   const authorItem = await author.get("name", frontmatter.author);
-  /*
-  const category = await categories.get("title", frontmatter.category);
-  */
+  const category = await categories.get("name", frontmatter.category);
 
   return (
     <>
       <article>
-        <header className={styles.header}>
-          <hgroup className={styles.hgroup}>
-            <h1>{title}</h1>
-            <p className={styles.titleFooter}>
+        <PageHeader
+          title={title}
+          headerText={category && <CategoryBadge {...category} />}
+          footerText={
+            <>
               <time>{date.toDateString()}</time>
               {authorItem && (
                 <span>
@@ -50,12 +49,13 @@ async function Page({ params }: { params: { slug: string[] } }) {
                   </NextLink>
                 </span>
               )}
-            </p>
-          </hgroup>
-        </header>
+            </>
+          }
+        />
         <div className="article">{content}</div>
         <footer className={styles.footer}>
-          <div>
+          <div className={styles.footerSummary}>
+            {category && <CategoryBadge {...category} />}
             <h2>{title}</h2>
             <p>
               Post:
@@ -72,16 +72,16 @@ async function Page({ params }: { params: { slug: string[] } }) {
         </footer>
       </article>
       <VStack>
-        {context.newer && (
-          <div>
-            <p>Newer post</p>
-            <Post {...context.newer} />
-          </div>
-        )}
         {context.older && (
           <div>
             <p>Older post</p>
             <Post {...context.older} />
+          </div>
+        )}
+        {context.newer && (
+          <div>
+            <p>Newer post</p>
+            <Post {...context.newer} />
           </div>
         )}
       </VStack>

@@ -2,6 +2,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-lg);
   align-items: stretch;
 }

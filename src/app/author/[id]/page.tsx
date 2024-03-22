@@ -1,5 +1,7 @@
-import { Post, VStack } from "@/components";
+import Image from "next/image";
+import { Post, VStack, AuthorSocials } from "@/components";
 import { author, post } from "@/content";
+import styles from "./page.module.css";
 
 export async function generateStaticParams() {
   const allAuthor = await author.getAll();
@@ -26,44 +28,24 @@ async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <div>
+      <article className={styles.authorHeader}>
         {image && (
-          <figure>
-            <img src={image} alt={name} />
+          <figure className={styles.figure}>
+            <Image
+              className={styles.image}
+              src={image}
+              alt={name}
+              width={480}
+              height={480}
+            />
           </figure>
         )}
-        <h1>{name}</h1>
+        <h1 className={styles.authorName}>{name}</h1>
         {description && <p>{description}</p>}
-        {socials && (
-          <address>
-            {socials.url && (
-              <a href={socials.url} target="_blank" rel="noreferrer noopener">
-                Web
-              </a>
-            )}
-            {socials.twitter && (
-              <a
-                href={`https://twitter.com/${socials.twitter}`}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                Twitter
-              </a>
-            )}
-            {socials.github && (
-              <a
-                href={`https://github.com/${socials.github}`}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                GitHub
-              </a>
-            )}
-          </address>
-        )}
-      </div>
+        <AuthorSocials socials={socials} />
+      </article>
       <div>
-        <h2>記事一覧</h2>
+        <p>記事一覧</p>
         <VStack>
           {authorsPosts
             .sort((a, b) => b.date.getTime() - a.date.getTime())

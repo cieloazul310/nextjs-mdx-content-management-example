@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <body className={inter.className}>
         <main className={styles.main}>
           <header className={styles.header}>
@@ -25,12 +25,15 @@ export default function RootLayout({ children }: PropsWithChildren) {
               <NextLink href="/">Next.js with MDX content</NextLink>
             </h1>
             <nav className={styles.nav}>
-              <NextLink href="/">Top</NextLink>
               <NextLink href="/post">Post</NextLink>
+              <NextLink href="/categories">Categories</NextLink>
               <NextLink href="/author">Author</NextLink>
             </nav>
           </header>
           <div className={styles.content}>{children}</div>
+          <footer className={styles.footer}>
+            <p>Next.js with MDX content</p>
+          </footer>
         </main>
       </body>
     </html>

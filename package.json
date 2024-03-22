@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "git config --local core.hooksPath .githooks",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "format": "prettier \"src/**/*.{ts,tsx}\" --parser typescript --write",
     "lint": "next lint"
   },
   "dependencies": {

@@ -1,8 +1,8 @@
-import * as path from 'path';
-import { readdir, readFile } from 'fs/promises';
-import { compileMDX, type MDXRemoteProps } from 'next-mdx-remote/rsc';
-import { z, type ZodObject, ZodRawShape } from 'zod';
-import { fileNameToSlug, dataSchemaVaridator } from './utils';
+import * as path from "path";
+import { readdir, readFile } from "fs/promises";
+import { compileMDX, type MDXRemoteProps } from "next-mdx-remote/rsc";
+import { z, type ZodObject, ZodRawShape } from "zod";
+import { fileNameToSlug, dataSchemaVaridator } from "./utils";
 
 const defaultFrontmatterSchema = z.object({
   title: z.string(),
@@ -39,7 +39,7 @@ function complementFrontmatter<T extends Record<string, any>>({
     title,
     date: new Date(date),
     lastmod: lastmod ? new Date(lastmod) : new Date(date),
-    draft: typeof draft === 'boolean' ? draft : false,
+    draft: typeof draft === "boolean" ? draft : false,
     ...rest,
   } as Frontmatter<T>;
 }
@@ -48,7 +48,7 @@ export function defineMdx<Z extends ZodRawShape>({
   contentPath,
   basePath,
   schema,
-  extensions = ['md', 'mdx'],
+  extensions = ["md", "mdx"],
 }: {
   contentPath: string;
   basePath: string;
@@ -65,7 +65,7 @@ export function defineMdx<Z extends ZodRawShape>({
   const varidator = dataSchemaVaridator(frontmatterSchema);
 
   async function getAll(
-    { sortDesc }: { sortDesc: boolean } = { sortDesc: false }
+    { sortDesc }: { sortDesc: boolean } = { sortDesc: false },
   ): Promise<
     (Metadata<RestFrontmatter> & {
       context: {
@@ -75,18 +75,18 @@ export function defineMdx<Z extends ZodRawShape>({
     })[]
   > {
     const filesInDir = await readdir(contentPath, {
-      encoding: 'utf8',
+      encoding: "utf8",
       recursive: true,
     });
     const files = filesInDir.filter((fileName) =>
-      extensions.some((ext) => new RegExp(ext).test(fileName))
+      extensions.some((ext) => new RegExp(ext).test(fileName)),
     );
 
     const allPosts = (
       await Promise.all(
         files.map(async (filename) => {
           const absolutePath = path.join(contentPath, filename);
-          const source = await readFile(absolutePath, { encoding: 'utf8' });
+          const source = await readFile(absolutePath, { encoding: "utf8" });
           const { frontmatter } = await compileMDX<
             FrontmatterInput<RestFrontmatter>
           >({
@@ -98,7 +98,7 @@ export function defineMdx<Z extends ZodRawShape>({
             absolutePath,
             filename,
           };
-        })
+        }),
       )
     )
       .filter(varidator)
@@ -115,9 +115,9 @@ export function defineMdx<Z extends ZodRawShape>({
       });
 
     return allPosts
-      .filter(({ draft }) => process.env.NODE_ENV === 'development' || !draft)
+      .filter(({ draft }) => process.env.NODE_ENV === "development" || !draft)
       .sort(
-        (a, b) => (sortDesc ? -1 : 1) * (a.date.getTime() - b.date.getTime())
+        (a, b) => (sortDesc ? -1 : 1) * (a.date.getTime() - b.date.getTime()),
       )
       .map((post, index, arr) => ({
         ...post,
@@ -131,7 +131,7 @@ export function defineMdx<Z extends ZodRawShape>({
   async function get(slug: string[]) {
     const alls = await getAll();
     const index = alls.findIndex(
-      (post) => post.slug.join('/') === slug.join('/')
+      (post) => post.slug.join("/") === slug.join("/"),
     );
     return alls[index];
   }
@@ -140,12 +140,12 @@ export function defineMdx<Z extends ZodRawShape>({
     {
       components,
       options,
-    }: Pick<MDXRemoteProps, 'components'> & {
-      options?: Omit<MDXRemoteProps['options'], 'parseFrontmatter'>;
-    } = {}
+    }: Pick<MDXRemoteProps, "components"> & {
+      options?: Omit<MDXRemoteProps["options"], "parseFrontmatter">;
+    } = {},
   ) {
     const { absolutePath, context } = await get(slug);
-    const file = await readFile(absolutePath, { encoding: 'utf8' });
+    const file = await readFile(absolutePath, { encoding: "utf8" });
     const { content, frontmatter } = await compileMDX<
       FrontmatterInput<RestFrontmatter>
     >({
