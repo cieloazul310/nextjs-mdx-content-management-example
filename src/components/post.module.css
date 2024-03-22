@@ -1,0 +1,12 @@
+.post {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--spacing-md) 0;
+  gap: var(--spacing-sm);
+}
+
+.footerText {
+  display: flex;
+  gap: var(--spacing-md);
+}

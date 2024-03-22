@@ -1,0 +1,13 @@
+.footer {
+  padding: var(--spacing-xl) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+}
+.footerSummary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+}
