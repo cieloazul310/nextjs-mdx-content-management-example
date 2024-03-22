@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { Post, VStack, AuthorSocials } from "@/components";
 import { author, post } from "@/content";
 import styles from "./page.module.css";
@@ -15,7 +16,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   const { name } = item;
   return {
     title: name,
-  };
+  } satisfies Metadata;
 }
 
 async function Page({ params }: { params: { id: string } }) {

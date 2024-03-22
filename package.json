@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "format": "prettier \"src/**/*.{ts,tsx}\" --parser typescript --write",
+    "format": "prettier \"src/**/*.{ts,tsx}\" --parser typescript --write && prettier \"src/**/*.css\" --parser css --write",
     "lint": "next lint"
   },
   "dependencies": {

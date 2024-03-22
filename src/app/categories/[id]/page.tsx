@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Post, VStack, PageHeader } from "@/components";
 import { categories, post } from "@/content";
 
@@ -13,7 +14,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   const { name } = item;
   return {
     title: name,
-  };
+  } satisfies Metadata;
 }
 
 async function Page({ params }: { params: { id: string } }) {

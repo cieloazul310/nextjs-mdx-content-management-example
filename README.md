@@ -1,6 +1,6 @@
 # Next.js App Router + MDX content management example
 
-Next.jsでMDXコンテンツマネジメントツールを自作するのデモページです。
+「Next.js App Router向けのMDXコンテンツマネジメントツールを自作する」のデモページです。
 
 記事  
 <https://qiita.com/cieloazul310/items/55e8d13e29d98425e2f8>
@@ -29,6 +29,12 @@ Next.jsでMDXコンテンツマネジメントツールを自作するのデモ�
 
 Demo  
 <https://nextjs-mdx-content-management-example.vercel.app>
+
+Zod  
+<https://zod.dev/>
+
+next-mdx-remote  
+<https://github.com/hashicorp/next-mdx-remote>
 
 GitHub Repo  
 <https://github.com/cieloazul310/nextjs-mdx-content-management-example>

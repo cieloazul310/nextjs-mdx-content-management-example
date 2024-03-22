@@ -2,7 +2,7 @@
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-  
+
   --spacing-sm: 4px;
   --spacing-md: 8px;
   --spacing-lg: 16px;
@@ -32,7 +32,12 @@ a:hover {
 .article {
   line-height: 1.6;
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     margin-top: 1.6em;
     margin-bottom: 0.8em;
   }
@@ -43,13 +48,15 @@ a:hover {
   }
 
   blockquote {
-    margin-top: 2em;
-    margin-bottom: 2em;
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
     padding: var(--spacing-sm) var(--spacing-md);
     border-left: 2px solid black;
   }
 
   pre {
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
     padding: var(--spacing-md);
     background-color: #eee;
     overflow-x: auto;

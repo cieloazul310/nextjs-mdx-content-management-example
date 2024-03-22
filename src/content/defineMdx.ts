@@ -1,7 +1,7 @@
 import * as path from "path";
 import { readdir, readFile } from "fs/promises";
 import { compileMDX, type MDXRemoteProps } from "next-mdx-remote/rsc";
-import { z, type ZodObject, ZodRawShape } from "zod";
+import { z, type ZodObject, type ZodRawShape } from "zod";
 import { fileNameToSlug, dataSchemaVaridator } from "./utils";
 
 const defaultFrontmatterSchema = z.object({
@@ -64,9 +64,7 @@ export function defineMdx<Z extends ZodRawShape>({
   });
   const varidator = dataSchemaVaridator(frontmatterSchema);
 
-  async function getAll(
-    { sortDesc }: { sortDesc: boolean } = { sortDesc: false },
-  ): Promise<
+  async function getAll(): Promise<
     (Metadata<RestFrontmatter> & {
       context: {
         older: Metadata<RestFrontmatter> | null;
@@ -117,7 +115,9 @@ export function defineMdx<Z extends ZodRawShape>({
     return allPosts
       .filter(({ draft }) => process.env.NODE_ENV === "development" || !draft)
       .sort(
-        (a, b) => (sortDesc ? -1 : 1) * (a.date.getTime() - b.date.getTime()),
+        (a, b) =>
+          a.date.getTime() - b.date.getTime() ||
+          a.lastmod.getTime() - b.lastmod.getTime(),
       )
       .map((post, index, arr) => ({
         ...post,
