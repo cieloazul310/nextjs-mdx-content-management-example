@@ -1,5 +1,6 @@
 import NextLink from "next/link";
-import { Author, Post, VStack, PageHeader, CategoryBadge } from "@/components";
+import type { Metadata } from "next";
+import { Author, Post, PageHeader, CategoryBadge } from "@/components";
 import { author, post, categories } from "@/content";
 import { useMDXComponents } from "@/mdx-components";
 import styles from "./page.module.css";
@@ -15,10 +16,14 @@ export async function generateMetadata({
   params: { slug: string[] };
 }) {
   const { slug } = params;
-  const { title } = await post.get(slug);
+  const { title, featuredImg } = await post.get(slug);
   return {
     title,
-  };
+    openGraph: {
+      title,
+      images: featuredImg && [featuredImg],
+    },
+  } satisfies Metadata;
 }
 
 async function Page({ params }: { params: { slug: string[] } }) {
@@ -27,7 +32,7 @@ async function Page({ params }: { params: { slug: string[] } }) {
   const { content, frontmatter, context } = await post.useMdx(slug, {
     components,
   });
-  const { title, date, lastmod } = frontmatter;
+  const { title, date, lastmod, draft } = frontmatter;
   const modified = date.getTime() !== lastmod.getTime();
   const authorItem = await author.get("name", frontmatter.author);
   const category = await categories.get("name", frontmatter.category);
@@ -52,6 +57,13 @@ async function Page({ params }: { params: { slug: string[] } }) {
             </>
           }
         />
+        {draft && (
+          <aside className={styles.draft}>
+            <p>
+              <strong>この記事は下書きです</strong>
+            </p>
+          </aside>
+        )}
         <div className="article">{content}</div>
         <footer className={styles.footer}>
           <div className={styles.footerSummary}>
@@ -71,20 +83,24 @@ async function Page({ params }: { params: { slug: string[] } }) {
           {authorItem && <Author {...authorItem} />}
         </footer>
       </article>
-      <VStack>
-        {context.older && (
-          <div>
+      <nav className={styles.neighborPosts}>
+        {context.older ? (
+          <div className={styles.neightbor}>
             <p>Older post</p>
             <Post {...context.older} />
           </div>
+        ) : (
+          <div className={styles.neighborPlaceholder} />
         )}
-        {context.newer && (
-          <div>
+        {context.newer ? (
+          <div className={styles.neightbor}>
             <p>Newer post</p>
             <Post {...context.newer} />
           </div>
+        ) : (
+          <div className={styles.neighborPlaceholder} />
         )}
-      </VStack>
+      </nav>
     </>
   );
 }
