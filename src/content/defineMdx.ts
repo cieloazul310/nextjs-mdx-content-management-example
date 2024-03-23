@@ -135,7 +135,7 @@ export function defineMdx<Z extends ZodRawShape>({
     );
     return alls[index];
   }
-  
+
   async function useMdx(
     slug: string[],
     {
