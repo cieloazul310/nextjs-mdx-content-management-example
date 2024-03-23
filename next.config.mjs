@@ -1,4 +1,4 @@
-import createMDX from '@next/mdx';
+import createMDX from "@next/mdx";
 
 const withMdx = createMDX({
   experimental: {

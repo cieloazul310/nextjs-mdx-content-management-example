@@ -22,7 +22,7 @@ export function defineData<T extends Record<string, any>>({
       recursive: true,
     });
     const files = filesInDir.filter((fileName) =>
-      extensions.some((ext) => new RegExp(ext).test(fileName)),
+      extensions.some((ext) => new RegExp(`.${ext}$`).test(fileName)),
     );
     const data = (
       await Promise.all(

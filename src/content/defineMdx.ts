@@ -77,7 +77,7 @@ export function defineMdx<Z extends ZodRawShape>({
       recursive: true,
     });
     const files = filesInDir.filter((fileName) =>
-      extensions.some((ext) => new RegExp(ext).test(fileName)),
+      extensions.some((ext) => new RegExp(`.${ext}$`).test(fileName)),
     );
 
     const allPosts = (
@@ -135,6 +135,7 @@ export function defineMdx<Z extends ZodRawShape>({
     );
     return alls[index];
   }
+  
   async function useMdx(
     slug: string[],
     {
