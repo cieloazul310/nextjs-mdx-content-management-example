@@ -7,19 +7,19 @@ import { defineMdx } from "./defineMdx";
 export const post = defineMdx({
   contentPath: path.resolve(process.cwd(), "content/post"),
   basePath: "/post",
-  schema: z.object({
+  schema: {
     author: z.string().optional(),
     category: z.string().optional(),
     featuredImg: z.string().optional(),
     featuredImgAlt: z.string().optional(),
-  }),
+  },
 });
 export type PostFrontmatter = z.infer<typeof post.schema>;
 export type PostMetadata = z.infer<typeof post.metadataSchema>;
 
 export const author = defineData({
   contentPath: path.resolve(process.cwd(), "content/author"),
-  schema: z.object({
+  schema: {
     name: z.string(),
     description: z.string().optional(),
     image: z.string().optional(),
@@ -30,15 +30,15 @@ export const author = defineData({
         github: z.string().optional(),
       })
       .optional(),
-  }),
+  },
 });
 export type Author = z.infer<typeof author.schema>;
 
 export const categories = defineDataFromFile({
   filePath: path.resolve(process.cwd(), "content/categories.yml"),
-  schema: z.object({
+  schema: {
     name: z.string(),
     description: z.string(),
-  }),
+  },
 });
 export type Categories = z.infer<typeof categories.schema>;

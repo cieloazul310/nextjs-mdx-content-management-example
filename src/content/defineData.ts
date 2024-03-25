@@ -1,22 +1,22 @@
 import { readFile, readdir } from "fs/promises";
 import * as path from "path";
-import { z, type ZodObject } from "zod";
-import { dataSchemaVaridator, dataFormatter } from "./utils";
+import { z, type ZodRawShape } from "zod";
+import { dataSchemaVaridator, dataFormatter, type DataFormat } from "./utils";
 
-export function defineData<T extends Record<string, any>>({
+export function defineData<T extends ZodRawShape>({
   contentPath,
   schema,
   format = "yaml",
 }: {
   contentPath: string;
-  schema: ZodObject<T>;
-  format?: "yaml" | "json";
+  schema: T;
+  format?: DataFormat;
 }) {
   const { extensions, parser } = dataFormatter(format);
-  const dataSchema = z.object({ id: z.string() }).merge(schema);
+  const dataSchema = z.object({ id: z.string() }).extend(schema).passthrough();
   const varidator = dataSchemaVaridator(dataSchema);
 
-  async function getAll() {
+  async function getAll(): Promise<z.infer<typeof dataSchema>[]> {
     const filesInDir = await readdir(contentPath, {
       encoding: "utf8",
       recursive: true,
@@ -24,7 +24,7 @@ export function defineData<T extends Record<string, any>>({
     const files = filesInDir.filter((fileName) =>
       extensions.some((ext) => new RegExp(`.${ext}$`).test(fileName)),
     );
-    const data = (
+    const collection = (
       await Promise.all(
         files.map(async (filename) => {
           const absolutePath = path.join(contentPath, filename);
@@ -40,10 +40,13 @@ export function defineData<T extends Record<string, any>>({
       .filter(varidator)
       .map(({ data }) => data);
 
-    return data;
+    return collection;
   }
 
-  async function get(key: keyof z.infer<typeof dataSchema>, value: unknown) {
+  async function get(
+    key: keyof z.infer<typeof dataSchema>,
+    value: unknown,
+  ): Promise<z.infer<typeof dataSchema> | undefined> {
     const data = await getAll();
     return data.find((datum) => datum?.[key] === value);
   }

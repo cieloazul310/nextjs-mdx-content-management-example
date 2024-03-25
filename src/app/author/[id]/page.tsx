@@ -25,7 +25,7 @@ async function Page({ params }: { params: { id: string } }) {
   if (!item) return null;
   const { name, description, image, socials } = item;
   const posts = await post.getAll();
-  const authorsPosts = posts.filter((post) => post.author === name);
+  const authorsPosts = posts.filter((post) => post.frontmatter.author === name);
 
   return (
     <>
@@ -49,7 +49,10 @@ async function Page({ params }: { params: { id: string } }) {
         <p>記事一覧</p>
         <VStack>
           {authorsPosts
-            .sort((a, b) => b.date.getTime() - a.date.getTime())
+            .sort(
+              (a, b) =>
+                b.frontmatter.date.getTime() - a.frontmatter.date.getTime(),
+            )
             .map((post) => (
               <Post key={post.href} {...post} />
             ))}

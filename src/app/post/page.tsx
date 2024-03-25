@@ -9,7 +9,10 @@ async function Page() {
       <PageHeader title="Post" />
       <VStack>
         {allPosts
-          .sort((a, b) => b.date.getTime() - a.date.getTime())
+          .sort(
+            (a, b) =>
+              b.frontmatter.date.getTime() - a.frontmatter.date.getTime(),
+          )
           .map((data) => (
             <Post key={data.href} {...data} />
           ))}

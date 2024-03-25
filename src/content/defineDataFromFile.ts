@@ -1,18 +1,18 @@
 import { readFile } from "fs/promises";
-import { z, type ZodObject } from "zod";
-import { schemaVaridator, dataFormatter } from "./utils";
+import { z, type ZodRawShape } from "zod";
+import { schemaVaridator, dataFormatter, type DataFormat } from "./utils";
 
-export function defineDataFromFile<T extends Record<string, any>>({
+export function defineDataFromFile<T extends ZodRawShape>({
   filePath,
   schema,
   format = "yaml",
 }: {
   filePath: string;
-  schema: ZodObject<T>;
-  format?: "yaml" | "json";
+  schema: T;
+  format?: DataFormat;
 }) {
   const { parser } = dataFormatter(format);
-  const dataSchema = z.object({ id: z.string() }).merge(schema);
+  const dataSchema = z.object({ id: z.string() }).extend(schema).passthrough();
   const varidator = schemaVaridator(dataSchema);
 
   async function getAll() {

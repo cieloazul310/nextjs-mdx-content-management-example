@@ -5,16 +5,15 @@ import styles from "./post.module.css";
 
 async function Post({
   href,
-  title,
-  date,
-  category,
-  draft,
-  ...props
-}: Pick<
-  PostMetadata,
-  "href" | "title" | "date" | "author" | "category" | "draft"
->) {
-  const authorItem = await author.get("name", props.author);
+  frontmatter,
+}: Pick<PostMetadata, "href"> & {
+  frontmatter: Pick<
+    PostMetadata["frontmatter"],
+    "title" | "date" | "author" | "category" | "draft"
+  >;
+}) {
+  const { title, date, category, draft } = frontmatter;
+  const authorItem = await author.get("name", frontmatter.author);
   const categoryItem = await categories.get("name", category);
 
   return (
